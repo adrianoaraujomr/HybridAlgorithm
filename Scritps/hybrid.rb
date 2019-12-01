@@ -2,6 +2,7 @@
 
 require "./social_graph"
 require "./write_results"
+require "./ant_colony"
 
 # Idea
 #  Use the ant colony to create diverse paths
