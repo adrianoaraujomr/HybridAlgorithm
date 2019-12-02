@@ -3,6 +3,7 @@
 require "./social_graph"
 require "./write_results"
 require "./ant_colony"
+require "./genetic_alg"
 
 # Idea
 #  Use the ant colony to create diverse paths
@@ -12,13 +13,11 @@ require "./ant_colony"
 class HybridAlgorithm
 	def initialize(graph,nodes,iterations,n_ants)
 		@alfa   = 1
-		@best   = [0,graph.n_nodes]
 		@graph  = graph
 		@iter   = iterations
 		@n_ants = n_ants
 		@nodes  = Hash.new
-		@heuri  = Hash.new
-		@answer = []
+		@best   = [0,graph.n_nodes]
 
 		# Initialize pheromone
 		#  maybe put some heuristic (number of neighbours)
@@ -35,40 +34,46 @@ class HybridAlgorithm
 			puts "Iteration " + i.to_s
 
 			# Ant initialization
-			ants = Array.new
+			paths = []
 			for j in 0..(@n_ants - 1)
-				a = Ant.new()
+				a = Ant.new
 				a.create_path_decrescent_rnd(@nodes,@graph,@nodes_f_sum,@alfa)
+				paths.push(a.path)
 			end
 
 			# Run the genetic operators
-			paths = []
-			for a in ants
-			end
+			ga  = GeneticAlg.new(paths,1,0.5)
+			ga.run()
 
 			# Solution quality/Pheromone update
-			lks   = []
 			for p in paths
-				lk = p.lenght
+				lk = p.length
 				for idx in p
 					@nodes[idx] += (1.0/lk)
 				end
 			end
 
+			# If needed run evaportaion
 			# Update the cumulative sum
 			att_nodes_f_sum
 		end
-		update_file()
+#		update_file()
+	end
+
+	private
+	def att_nodes_f_sum()
+		aux = 0
+		for i in @nodes.keys
+			aux += @nodes[i]**@alfa
+		end
+		@nodes_f_sum = aux
 	end
 
 end
 
 END{
-	init_file()
+#	init_file()
 	graph = SocialNetwork.new
-	puts graph.keys.inspect
-	saco  = HybridAlgorithm.new(graph,graph.keys,5000,100)
-	saco.run()
-	puts graph.keys.inspect
-     puts graph.show_graph
+	hype  = HybridAlgorithm.new(graph,graph.keys,1,5)
+	hype.run()
 }

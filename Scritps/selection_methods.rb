@@ -18,14 +18,12 @@ def Domination(first,second)
 end
 
 class Tournament
-# 1 in 2, change to m in n (m < n)
-# Try EVO format 3 in 8
 	def run(pop,sr)
 		n_sorteios = sr*pop.length
 		n_sorteios = n_sorteios.round
 
 		aux = Array.new()
-		while aux.size <= n_sorteios
+		while aux.size < n_sorteios
 			st  = rand(pop.length)
 			nd  = rand(pop.length)
 			

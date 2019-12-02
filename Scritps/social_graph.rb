@@ -3,11 +3,8 @@
 require 'set'
 require "./file_to_hash"
 
-# Social Network Graph
-#	It will deal with operations involving directly the graph
 class SocialNetwork
 	@@graph = edge_list_to_hash()
-#	@@graph = read_transform()
 
 	def show_graph()
 		return @@graph

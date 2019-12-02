@@ -4,6 +4,7 @@ require 'set'
 require "./selection_methods.rb"
 
 class IndividualGraph
+	@@graph         = SocialNetwork.new
 	@@prob_mutation = 0.01
 	@@prob_crossing = 0.8
 	@@a             = 1
@@ -11,51 +12,27 @@ class IndividualGraph
 	attr_accessor :feature
 	attr_accessor :fitness
 
-	# Mudar feature de Array para Set
-	def initialize(graph)
-		@graph = graph
-		@keys  = graph.keys
-		val = rand(@@a) + @@b
-		@feature = graph.keys.sample(val)
-
-		fit = Array.new()
-		flw = graph.neighbours(@feature)
-		fit.push(@feature.size,flw)
-		@fitness = fit
+	def initialize(path)
+		@feature = path
 	end
 
-	def prob_mutation()
-		return @@prob_mutation
+	def fitness()
+		return [@@graph.neighbours(@feature),@feature.size]
 	end
 
-	def prob_crossing()
-		return @@prob_crossing
-	end
-
-	def range_val()
-		return [@@a,@@b]
-	end
-
-	# More simple and agressive mutation
 	def mutation()
 		if rand() <= @@prob_mutation
 			nro = rand(10) + 10
-			spl = @keys.sample(nro)
+			spl = @@graph.keys.sample(nro)
 
 			aux_1 = Set.new spl
 			aux_2 = Set.new @feature
 			aux_1.merge aux_2
 
 			@feature = aux_1.to_a
-
-			fit = Array.new()
-			flw = @graph.neighbours(@feature)
-			fit.push(@feature.size,flw)
-			@fitness = fit
 		end
 	end
 
-	# Ideia 1 : sortear um ponto em cada vetor e fazer a troca das partes do vetor de cada individuo
 	def crossing(graph,partner)
 		if rand() <= @@prob_crossing
 			i = rand(@feature.length)
@@ -84,13 +61,28 @@ class IndividualGraph
 		end
 		return nil
 	end
+
+	def prob_mutation()
+		return @@prob_mutation
+	end
+
+	def prob_crossing()
+		return @@prob_crossing
+	end
+
+	def range_val()
+		return [@@a,@@b]
+	end
 end
 
 class SPopulation
 	attr_accessor :people
 
-	def initialize(path)
-		@people = path
+	def initialize(paths)
+		@people = []
+		for ant in paths
+			@people.push(IndividualGraph.new(ant))
+		end
 	end
 
 	def mutation(seld)

@@ -6,40 +6,31 @@ require "./individual.rb"
 require 'gruff'
 
 class GeneticAlg
-	@@generations = 50000
-	@@sr = 0.8
-
-	def initialize(pop,smethods)
-		@population    = pop
-		@selection     = smethods
+	def initialize(paths,gen,sr)
+		@generations = gen
+		@sr          = sr
+		@population  = SPopulation.new(paths)
+		@selection   = Tournament.new()
 	end
 
 	def run()
-		for i in 0..@@generations do
+		for i in 0..@generations do
 			puts i
 			eval = @population.fitness
 
-			# Seleção
-			seld = @selection.run(eval,@@sr)
+#			# Seleção
+			seld = @selection.run(eval,@sr)
 
-			# Cruzamento/Combinação
+#			# Cruzamento/Combinação
 			aux = @population.crossing_1(seld,$sonet)
 
-			# Mutação
+#			# Mutação
 			@population.mutation_2(seld)
 
-			# Update population (only if crossing_1 is used)		
+#			# Update population (only if crossing_1 is used)		
 			@population.update_population(aux,$sonet)
 
 			eval = @population.fitness
 		end
 	end
 end
-
-#END {
-#	$sonet = SocialNetwork.new
-#	pop = SPopulation.new(100,$sonet)
-#	sel = Tournament.new()
-#	gen = GeneticAlg.new(pop,sel)
-#	gen.run()
-#}
