@@ -33,6 +33,7 @@ class HybridAlgorithm
 		for i in 1..@iter
 			puts "Iteration " + i.to_s
 
+			puts "Ants path"
 			# Ant initialization
 			paths = []
 			for j in 0..(@n_ants - 1)
@@ -40,10 +41,13 @@ class HybridAlgorithm
 				a.create_path_decrescent_rnd(@nodes,@graph,@nodes_f_sum,@alfa)
 				paths.push(a.path)
 			end
+			puts paths.inspect
 
+			puts "Genetic paths"
 			# Run the genetic operators
-			ga  = GeneticAlg.new(paths,1,0.5)
-			ga.run()
+			ga    = GeneticAlg.new(paths,1,0.5)
+			paths = ga.run()
+			puts paths.inspect
 
 			# Solution quality/Pheromone update
 			for p in paths

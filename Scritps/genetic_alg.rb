@@ -5,6 +5,8 @@ require "./selection_methods.rb"
 require "./individual.rb"
 require 'gruff'
 
+$sonet = SocialNetwork.new
+
 class GeneticAlg
 	def initialize(paths,gen,sr)
 		@generations = gen
@@ -17,20 +19,26 @@ class GeneticAlg
 		for i in 0..@generations do
 			puts i
 			eval = @population.fitness
+			print "Evaluation : "
+			puts eval.inspect
 
 #			# Seleção
 			seld = @selection.run(eval,@sr)
+			print "Selecteds : "
+			puts seld.inspect
 
 #			# Cruzamento/Combinação
-			aux = @population.crossing_1(seld,$sonet)
+			aux = @population.crossing(seld,$sonet)
 
 #			# Mutação
-			@population.mutation_2(seld)
+			@population.mutation(seld)
 
-#			# Update population (only if crossing_1 is used)		
+#			# Update population
 			@population.update_population(aux,$sonet)
 
 			eval = @population.fitness
 		end
+
+		return @population.pop_values
 	end
 end

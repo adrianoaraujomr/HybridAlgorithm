@@ -35,9 +35,16 @@ class IndividualGraph
 
 	def crossing(graph,partner)
 		if rand() <= @@prob_crossing
+			puts "Crossing"
+			puts @feature.inspect
+			puts partner.feature.inspect
+
 			i = rand(@feature.length)
+			puts i
 			p11 = @feature[0,i]
 			p12 = @feature[i,@feature.length]
+			puts p11.inspect
+			puts p12.inspect
 
 			j = rand(partner.feature.length)
 			p21 = partner.feature[0,j]
@@ -51,6 +58,9 @@ class IndividualGraph
 
 			f1 = f1.to_a
 			f2 = f2.to_a
+
+			puts f1.inspect
+			puts f2.inspect
 
 			ret = Array.new
 			ret.push(f1)
@@ -92,13 +102,21 @@ class SPopulation
 	end
 
 	def crossing(seld,graph)
+		childs = Array.new
 		for j in 1..(seld.length - 1)
-			@people[seld[j - 1]].crossing(graph,@people[seld[j]])
+			aux = @people[seld[j - 1]].crossing(graph,@people[seld[j]])
+			if aux != nil
+				childs += aux
+			end
 		end
+		return childs
 	end
 
+	# This function could be cuasing trouble childs x paretns
 	def update_population(children,graph)
 		j = 0
+
+		puts "Update"
 
 		for i in 0..@people.length - 1
 			if j == children.length
@@ -107,6 +125,7 @@ class SPopulation
 
 			child_fit = [children[j].size,graph.neighbours(children[j])]
 			aux = Domination(child_fit,@people[i].fitness)
+			puts aux
 
 			case aux
 			when 1 then

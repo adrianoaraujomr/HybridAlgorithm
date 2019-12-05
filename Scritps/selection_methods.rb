@@ -1,15 +1,15 @@
 #!/usr/bin/ruby -w
 
 def Domination(first,second)
-	if    first[1] > second[1]
+	if    first[0] > second[0]
 		return 1
-	elsif first[1] < second[1]
+	elsif first[0] < second[0]
 		return 2
 	end
 
-	if first[0] < second[0]
+	if first[1] < second[1]
 		return 1
-	elsif first[0] > second[0]
+	elsif first[1] > second[1]
 		return 2
 	end
 	
