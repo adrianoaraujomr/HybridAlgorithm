@@ -33,20 +33,15 @@ class IndividualGraph
 		end
 	end
 
+	# Maybe change the way of change points
 	def crossing(graph,partner)
 		if rand() <= @@prob_crossing
-			puts "Crossing"
-			puts @feature.inspect
-			puts partner.feature.inspect
-
-			i = rand(@feature.length)
+			i = rand(@feature.length) + 1
 			puts i
 			p11 = @feature[0,i]
 			p12 = @feature[i,@feature.length]
-			puts p11.inspect
-			puts p12.inspect
 
-			j = rand(partner.feature.length)
+			j = rand(partner.feature.length) + 1
 			p21 = partner.feature[0,j]
 			p22 = partner.feature[j,@feature.length]
 
@@ -58,9 +53,6 @@ class IndividualGraph
 
 			f1 = f1.to_a
 			f2 = f2.to_a
-
-			puts f1.inspect
-			puts f2.inspect
 
 			ret = Array.new
 			ret.push(f1)

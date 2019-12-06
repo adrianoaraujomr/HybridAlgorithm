@@ -19,13 +19,9 @@ class GeneticAlg
 		for i in 0..@generations do
 			puts i
 			eval = @population.fitness
-			print "Evaluation : "
-			puts eval.inspect
 
 #			# Seleção
 			seld = @selection.run(eval,@sr)
-			print "Selecteds : "
-			puts seld.inspect
 
 #			# Cruzamento/Combinação
 			aux = @population.crossing(seld,$sonet)
