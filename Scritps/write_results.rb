@@ -1,10 +1,10 @@
 #!/usr/bin/ruby -w
 
 $test_nro   = 0
-$file_name  = "./Results/results_"
+$file_name  = "../Results/results_"
 
 def init_file()
-	fd = File.open("./Results/test_nro.txt","r")
+	fd = File.open("../Results/test_nro.txt","r")
 	$test_nro  = fd.read.strip
 	$file_name = $file_name + $test_nro + ".csv"  
 	puts $file_name
@@ -12,7 +12,7 @@ def init_file()
 end
 
 def update_file()
-	fd = File.open("./Results/test_nro.txt","w")
+	fd = File.open("../Results/test_nro.txt","w")
 	puts $test_nro.to_i + 1
 	fd.write($test_nro.to_i + 1)
 	fd.close

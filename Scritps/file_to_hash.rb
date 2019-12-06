@@ -20,6 +20,7 @@ def edge_list_to_hash()
 			hs[edge[1]] = Array.new()
 		end
 		hs[edge[0]].push(edge[1])
+		hs[edge[1]].push(edge[0]) # Comment this line so the graph become a digraph
 	end
 
 	return hs
