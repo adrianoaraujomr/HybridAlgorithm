@@ -3,7 +3,7 @@
 import os
 import matplotlib.pyplot as plt
 
-fig_dir = "./pyplot/"
+fig_dir = "../View/"
 
 def plot_media_graph(fn,nodes,flwrs):
 	gen = range(0,len(nodes))
@@ -41,17 +41,16 @@ def plot_graphs(fn,nodes,flwrs):
 	plt.close()
 
 
-files = os.listdir("./Results")
+files = os.listdir("../Results")
 for fn in files:
-
 	if ".csv" in fn:
 		paths = []
 		ranks = []
 		media = []
-		fd = open("./Results/" + fn,"r")
+		fd = open("../Results/" + fn,"r")
 		lines = fd.readlines()
 		try:
-			os.mkdir("./pyplot/" + fn.replace(".csv",""))
+			os.mkdir("../View/" + fn.replace(".csv",""))
 		except:
 			pass
 
@@ -60,6 +59,7 @@ for fn in files:
 			ln = ln.strip().split(";")
 			if ln[0] == "LK":
 				aux = 0
+				print(ln)
 				for size in ln[2:len(ln) - 1]:
 					paths.append(int(size))
 					aux += int(size)
@@ -67,7 +67,7 @@ for fn in files:
 			else:
 				for rank in ln[2:len(ln) - 1]:
 					ranks.append(float(rank))
-#				plot_graphs(fn.replace(".csv","") + "/" + ln[1] + "_" + fn,paths,ranks)
+				plot_graphs(fn.replace(".csv","") + "/" + ln[1] + "_" + fn,paths,ranks)
 				paths = []
 				ranks = []
 

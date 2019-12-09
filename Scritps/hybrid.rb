@@ -42,14 +42,16 @@ class HybridAlgorithm
 			end
 
 			# Run the genetic operators
-			ga    = GeneticAlg.new(paths,1,0.5) # path,iterations,selection_rate
+			ga    = GeneticAlg.new(paths,100,0.6) # path,iterations,selection_rate
 			paths = ga.run()
 
 			# If needed use evaporation
 
 			# Solution quality/Pheromone update
+			lks = []
 			for p in paths
 				lk = p.length
+				lks.push(lk)
 				for idx in p
 					@nodes[idx] += (1.0/lk)
 				end
@@ -58,7 +60,7 @@ class HybridAlgorithm
 			# If needed run evaportaion
 			# Update the cumulative sum
 			att_nodes_f_sum
-			write_stats(i,paths,@nodes,@nodes_f_sum)
+			write_stats(i,lks,@nodes,@nodes_f_sum)
 		end
 	end
 
@@ -77,7 +79,7 @@ END{
 	init_file()
 	graph = SocialNetwork.new
 	puts graph.show_graph
-	hype  = HybridAlgorithm.new(graph,graph.keys,1,5)
-#	hype.run()
+	hype  = HybridAlgorithm.new(graph,graph.keys,1000,50)
+	hype.run()
 	update_file()
 }

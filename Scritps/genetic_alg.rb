@@ -14,7 +14,7 @@ class GeneticAlg
 
 	def run()
 		for i in 0..@generations do
-			puts "G" + i.to_s
+#			puts "G " + i.to_s
 			eval = @population.fitness
 
 #			# Seleção
