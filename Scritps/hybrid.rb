@@ -23,8 +23,9 @@ class HybridAlgorithm
 		#  maybe put some heuristic (number of neighbours)
 		aux = 0
 		for i in 0..(nodes.size - 1)
-			@nodes[nodes[i]] = 0.5
-			aux += (0.5**@alfa)
+			r = rand()
+			@nodes[nodes[i]] = r
+			aux += (r**@alfa)
 		end
 		@nodes_f_sum = aux
 	end
@@ -37,19 +38,24 @@ class HybridAlgorithm
 			paths = []
 			for j in 0..(@n_ants - 1)
 				a = Ant.new
-				a.create_path_decrescent_rnd(@nodes,@graph,@nodes_f_sum,@alfa)
+				a.create_path_roulette(@nodes,@graph,@nodes_f_sum,@alfa)
 				paths.push(a.path)
 			end
 
 			# Run the genetic operators
-			ga    = GeneticAlg.new(paths,100,0.6) # path,iterations,selection_rate
-			paths = ga.run()
+#			ga    = GeneticAlg.new(paths,100,0.6) # path,iterations,selection_rate
+#			paths = ga.run()
 
 			# If needed use evaporation
+#			for j in @nodes.keys
+#				@nodes[j] *= (1 - rand())
+#				@nodes[j] *= (1 - 0.05)
+#			end
 
 			# Solution quality/Pheromone update
 			lks = []
 			for p in paths
+#				puts p.inspect
 				lk = p.length
 				lks.push(lk)
 				for idx in p
@@ -79,7 +85,7 @@ END{
 	init_file()
 	graph = SocialNetwork.new
 	puts graph.show_graph
-	hype  = HybridAlgorithm.new(graph,graph.keys,1000,50)
+	hype  = HybridAlgorithm.new(graph,graph.keys,1000,10)
 	hype.run()
 	update_file()
 }

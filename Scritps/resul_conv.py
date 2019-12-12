@@ -59,7 +59,7 @@ for fn in files:
 			ln = ln.strip().split(";")
 			if ln[0] == "LK":
 				aux = 0
-				print(ln)
+#				print(ln)
 				for size in ln[2:len(ln) - 1]:
 					paths.append(int(size))
 					aux += int(size)
