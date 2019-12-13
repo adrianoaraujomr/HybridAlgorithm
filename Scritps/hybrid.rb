@@ -12,11 +12,13 @@ require "./genetic_alg"
 
 class HybridAlgorithm
 	def initialize(graph,nodes,iterations,n_ants)
-		@alfa   = 1
+		@alfa   = 3
+		@beta   = 1
 		@graph  = graph
 		@iter   = iterations
 		@n_ants = n_ants
 		@nodes  = Hash.new
+		@heuri  = Hash.new
 		@best   = [0,graph.n_nodes]
 
 		# Initialize pheromone
@@ -24,8 +26,12 @@ class HybridAlgorithm
 		aux = 0
 		for i in 0..(nodes.size - 1)
 			r = rand()
-			@nodes[nodes[i]] = r
-			aux += (r**@alfa)
+			x = graph.neighbours_list(nodes[i]).size + 2
+			h = (1.0 - (1.0/x))
+			@nodes[nodes[i]] = 0.5
+			@heuri[nodes[i]] = h
+
+			aux += (0.5**@alfa) * (h**@beta)
 		end
 		@nodes_f_sum = aux
 	end
@@ -38,7 +44,8 @@ class HybridAlgorithm
 			paths = []
 			for j in 0..(@n_ants - 1)
 				a = Ant.new
-				a.create_path_roulette(@nodes,@graph,@nodes_f_sum,@alfa)
+				a.create_path_crescent_rnd(@nodes,@heuri,@graph,@nodes_f_sum,@alfa,@beta)
+#				a.create_path_roulette(@nodes,@graph,@nodes_f_sum,@alfa)
 				paths.push(a.path)
 			end
 
@@ -47,10 +54,9 @@ class HybridAlgorithm
 #			paths = ga.run()
 
 			# If needed use evaporation
-#			for j in @nodes.keys
-#				@nodes[j] *= (1 - rand())
-#				@nodes[j] *= (1 - 0.05)
-#			end
+			for j in @nodes.keys
+				@nodes[j] *= (1 - rand())
+			end
 
 			# Solution quality/Pheromone update
 			lks = []
@@ -74,7 +80,8 @@ class HybridAlgorithm
 	def att_nodes_f_sum()
 		aux = 0
 		for i in @nodes.keys
-			aux += @nodes[i]**@alfa
+			aux += (@nodes[i]**@alfa) * (@heuri[i]**@beta)
+#			aux += @nodes[i]**@alfa
 		end
 		@nodes_f_sum = aux
 	end

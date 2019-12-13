@@ -6,6 +6,35 @@ require "./write_results"
 
 # Somethins tells me the problem is in here
 class Ant
+	def create_path_crescent_rnd(node_hash,heuristics,graph,cum_sum,alfa,beta)
+		@path = [] # Array
+		@path.push(node_hash.keys.sample)
+		@stop = graph.neighbours(@path)
+		while @stop < graph.n_nodes
+			j = node_hash.keys.sample
+			r = rand()
+			if((r < ((node_hash[j]**alfa)*(heuristics[j]**beta)/cum_sum)) and (not(@path.include? j)))# probability of chosing the j node
+				@path.push(j)
+				@stop = graph.neighbours(@path)
+			end
+		end
+	end
+
+	def create_path_decrescent_rnd(node_hash,graph,cum_sum,alfa)
+		@path = node_hash.keys # Array
+		@stop = graph.neighbours(@path)
+		while @stop == graph.n_nodes
+			j = @path.sample       # probale new node
+			r = rand()                  # "randomness control"
+			if r > ((node_hash[j]**alfa))/cum_sum
+				rm = @path.delete(j)
+				@stop = graph.neighbours(@path)
+			end
+		end
+		@path.push(rm)
+
+	end
+
 	def create_path_roulette(node_hash,graph,cum_sum,alfa)
 		@roulette = []
 		aux = 0
@@ -39,51 +68,6 @@ class Ant
 			end
 		end
 
-	end
-
-	def create_path_crescent_rnd(node_hash,graph,cum_sum,alfa)
-		@path = []
-		@path.push(node_hash.keys.sample)
-		@stop = graph.neighbours(@path)
-		while @stop < graph.n_nodes
-			j = node_hash.keys.sample
-			r = rand()
-			if ((r < (node_hash[j]**alfa)/cum_sum) and not (@path.include? j))
-				@path.push(j)
-				@stop = graph.neighbours(@path)
-			end
-		end
-	end
-
-	def create_path_decrescent_rnd(node_hash,graph,cum_sum,alfa)
-		@path = node_hash.keys # Array
-		@stop = graph.neighbours(@path)
-		while @stop == graph.n_nodes
-			j = @path.sample       # probale new node
-			r = rand()                  # "randomness control"
-			if r > ((node_hash[j]**alfa))/cum_sum
-				rm = @path.delete(j)
-				@stop = graph.neighbours(@path)
-			end
-		end
-		@path.push(rm)
-
-	end
-	
-	def create_path_decrescent_seq(node_hash,graph,cum_sum,alfa)
-		@path = node_hash.keys # Array
-		@stop = graph.neighbours(@path)
-		i = 0
-		while @stop == graph.n_nodes
-			i = (i + 1).modulo @path.length
-			j = @path[i]                # probale new node
-			r = rand()                  # "randomness control"
-			if r > ((node_hash[j]**alfa))/cum_sum
-				rm = @path.delete(j)
-				@stop = graph.neighbours(@path)
-			end
-		end
-		@path.push(rm)
 	end
 
 	def path()
