@@ -48,8 +48,8 @@ class HybridAlgorithm
 			end
 
 			# Run the genetic operators
-#			ga    = GeneticAlg.new(paths,100,0.5) # path,iterations,selection_rate
-#			paths = ga.run()
+			ga    = GeneticAlg.new(paths,100,0.5) # path,iterations,selection_rate
+			paths = ga.run()
 
 			# Evaporation
 			for k in @nodes.keys
