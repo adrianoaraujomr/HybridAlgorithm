@@ -16,6 +16,10 @@ class GeneticAlg
 		for i in 0..@generations do
 #			puts "G " + i.to_s
 			eval = @population.fitness
+			if(i == 0 or i == @generations - 1)
+				aux = eval.map{|x| x[1]}
+				puts aux.inspect
+			end
 
 #			# Seleção
 			seld = @selection.run(eval,@sr)

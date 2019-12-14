@@ -12,8 +12,8 @@ require "./genetic_alg"
 
 class HybridAlgorithm
 	def initialize(graph,nodes,iterations,n_ants)
-		@alfa   = 3
-		@beta   = 1
+		@alfa   = 1 #5
+		@beta   = 1 #1
 		@graph  = graph
 		@iter   = iterations
 		@n_ants = n_ants
@@ -22,7 +22,6 @@ class HybridAlgorithm
 		@best   = [0,graph.n_nodes]
 
 		# Initialize pheromone
-		#  maybe put some heuristic (number of neighbours)
 		aux = 0
 		for i in 0..(nodes.size - 1)
 			r = rand()
@@ -40,22 +39,21 @@ class HybridAlgorithm
 		for i in 1..@iter
 			puts "Iteration " + i.to_s
 
-			# Ant initialization
+			# Path creation
 			paths = []
 			for j in 0..(@n_ants - 1)
 				a = Ant.new
 				a.create_path_crescent_rnd(@nodes,@heuri,@graph,@nodes_f_sum,@alfa,@beta)
-#				a.create_path_roulette(@nodes,@graph,@nodes_f_sum,@alfa)
 				paths.push(a.path)
 			end
 
 			# Run the genetic operators
-#			ga    = GeneticAlg.new(paths,100,0.6) # path,iterations,selection_rate
+#			ga    = GeneticAlg.new(paths,100,0.5) # path,iterations,selection_rate
 #			paths = ga.run()
 
-			# If needed use evaporation
-			for j in @nodes.keys
-				@nodes[j] *= (1 - rand())
+			# Evaporation
+			for k in @nodes.keys
+				@nodes[k] *= (1 - rand())
 			end
 
 			# Solution quality/Pheromone update
@@ -69,8 +67,7 @@ class HybridAlgorithm
 				end
 			end
 
-			# If needed run evaportaion
-			# Update the cumulative sum
+			# Update the cumulative sum && write results on csv
 			att_nodes_f_sum
 			write_stats(i,lks,@nodes,@nodes_f_sum)
 		end
@@ -86,13 +83,14 @@ class HybridAlgorithm
 		@nodes_f_sum = aux
 	end
 
+
 end
 
 END{
 	init_file()
 	graph = SocialNetwork.new
 	puts graph.show_graph
-	hype  = HybridAlgorithm.new(graph,graph.keys,1000,10)
+	hype  = HybridAlgorithm.new(graph,graph.keys,1000,25)
 	hype.run()
 	update_file()
 }
