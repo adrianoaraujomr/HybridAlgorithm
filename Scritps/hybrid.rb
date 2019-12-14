@@ -48,8 +48,8 @@ class HybridAlgorithm
 			end
 
 			# Run the genetic operators
-			ga    = GeneticAlg.new(paths,100,0.5) # path,iterations,selection_rate
-			paths = ga.run()
+#			ga    = GeneticAlg.new(paths,100,0.5) # path,iterations,selection_rate
+#			paths = ga.run()
 
 			# Evaporation
 			for k in @nodes.keys
@@ -90,7 +90,7 @@ END{
 	init_file()
 	graph = SocialNetwork.new
 	puts graph.show_graph
-	hype  = HybridAlgorithm.new(graph,graph.keys,1000,25)
+	hype  = HybridAlgorithm.new(graph,graph.keys,250,50)
 	hype.run()
 	update_file()
 }
